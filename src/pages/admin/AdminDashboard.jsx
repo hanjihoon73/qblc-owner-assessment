@@ -56,7 +56,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div style={{ backgroundColor: 'var(--bg-primary)', padding: '2rem', borderRadius: '8px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)' }}>
+    <div style={{ width: '100%', backgroundColor: 'var(--bg-primary)', padding: '2rem', borderRadius: '8px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '2px solid var(--border-light)', paddingBottom: '1rem' }}>
         <div>
           <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>응시 내역 대시보드</h2>

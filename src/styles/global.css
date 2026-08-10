@@ -45,6 +45,7 @@ input, textarea, select {
 /* 유틸리티 클래스 */
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 1rem;
 }
