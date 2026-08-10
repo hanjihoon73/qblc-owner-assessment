@@ -133,8 +133,37 @@ function doPost(e) {
     const postData = JSON.parse(e.postData.contents);
     const action = postData.action;
 
+    // --- 관리자 이메일 인증 요청 ---
+    if (action === "request_admin_auth") {
+      const email = postData.email;
+      if (!email || !email.endsWith('@quebon.com')) {
+        result = { success: false, message: "접근 권한이 없습니다. 깨봉 사내 이메일을 사용해 주세요." };
+      } else {
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        CacheService.getScriptCache().put('admin_auth_' + email, code, 300); // 5분 유지
+        MailApp.sendEmail({
+          to: email,
+          subject: "[깨봉수학] 원장 모의평가 관리자 로그인 인증",
+          body: "관리자 시스템에 로그인하기 위한 인증 번호입니다.\n\n인증 번호: " + code + "\n\n5분 내에 화면에 입력해 주세요."
+        });
+        result = { success: true, message: "인증 메일이 발송되었습니다." };
+      }
+    }
+    // --- 관리자 이메일 인증 확인 ---
+    else if (action === "verify_admin_auth") {
+      const email = postData.email;
+      const code = postData.code;
+      const savedCode = CacheService.getScriptCache().get('admin_auth_' + email);
+      
+      if (savedCode && savedCode === code) {
+        CacheService.getScriptCache().remove('admin_auth_' + email);
+        result = { success: true, message: "인증 성공" };
+      } else {
+        result = { success: false, message: "인증 번호가 일치하지 않거나 만료되었습니다." };
+      }
+    }
     // --- 글로벌 세팅 업데이트 ---
-    if (action === "update_settings") {
+    else if (action === "update_settings") {
       const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("settings");
       const data = sheet.getDataRange().getValues();
       let found = false;
@@ -387,5 +416,10 @@ function setupSheetHeaders() {
   }
   
   SpreadsheetApp.getUi().alert('✅ 어드민 스펙용 시트 세팅이 완벽히 끝났습니다!');
+}
+
+// === 이메일 발송 권한 강제 획득용 함수 ===
+function testMailPermission() {
+  MailApp.sendEmail(Session.getActiveUser().getEmail(), "권한 테스트", "이메일 권한을 얻기 위한 테스트입니다.");
 }
 ```

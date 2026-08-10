@@ -10,11 +10,17 @@ export default function QuestionManager({ question, onSave, onCancel }) {
 
   useEffect(() => {
     if (question) {
-      setFormData(question);
+      setFormData({
+        ...question,
+        option1: question.options && question.options[0] ? question.options[0] : '',
+        option2: question.options && question.options[1] ? question.options[1] : '',
+        option3: question.options && question.options[2] ? question.options[2] : '',
+        option4: question.options && question.options[3] ? question.options[3] : '',
+      });
     } else {
       setFormData({
         id: 'q' + new Date().getTime(), set_id: 'A', number: '', type: 'MC', section_id: '1', 
-        text: '', option1: '', option2: '', option3: '', option4: '', points: '2', answer: ''
+        text: '', option1: '', option2: '', option3: '', option4: '', points: '2', answer: '①'
       });
     }
   }, [question]);
@@ -81,9 +87,23 @@ export default function QuestionManager({ question, onSave, onCancel }) {
 
           <div>
             <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.3rem', color: 'var(--primary-main)', fontWeight: 'bold' }}>
-              정답 {formData.type === 'MC' ? '(1~4)' : formData.type === 'OX' ? '(O 또는 X)' : '(서술형은 수동채점 입력)'}
+              정답
             </label>
-            <input name="answer" value={formData.answer} onChange={handleChange} style={{ width: '100%', padding: '0.5rem', border: '2px solid var(--primary-main)' }} required />
+            {formData.type === 'MC' ? (
+              <select name="answer" value={formData.answer} onChange={handleChange} style={{ width: '100%', padding: '0.5rem', border: '2px solid var(--primary-main)' }}>
+                <option value="①">보기 1 (①)</option>
+                <option value="②">보기 2 (②)</option>
+                <option value="③">보기 3 (③)</option>
+                <option value="④">보기 4 (④)</option>
+              </select>
+            ) : formData.type === 'OX' ? (
+              <select name="answer" value={formData.answer} onChange={handleChange} style={{ width: '100%', padding: '0.5rem', border: '2px solid var(--primary-main)' }}>
+                <option value="O">O</option>
+                <option value="X">X</option>
+              </select>
+            ) : (
+              <input name="answer" value={formData.answer} onChange={handleChange} placeholder="수동 채점 입력" style={{ width: '100%', padding: '0.5rem', border: '2px solid var(--primary-main)' }} required />
+            )}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>

@@ -10,7 +10,7 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '1200px', width: '100%', margin: '0 auto' }}>
       <div style={{ backgroundColor: 'var(--bg-primary)', padding: '1rem', borderRadius: '8px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border-light)' }}>
         <h2 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>관리자 시스템</h2>
         <nav style={{ display: 'flex', gap: '1rem' }}>
