@@ -21,8 +21,9 @@ export default function ExamForm() {
     formatTime,
     getUnansweredQuestions,
     isSubmitting,
-    setIsSubmitting
-  } = useExam(owner?.assigned_set_id);
+    setIsSubmitting,
+    clearExamState
+  } = useExam(owner);
 
   // 로그인하지 않은 사용자는 튕겨냄
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function ExamForm() {
     try {
       const timeTaken = 5400 - timeLeft;
       const result = await submitExam(owner, answers, timeTaken);
+      clearExamState(); // 제출 성공 시 저장된 데이터 삭제
       alert("제출이 완료되었습니다.");
       navigate(`/result/${result.id}`, { state: { result } });
     } catch (err) {

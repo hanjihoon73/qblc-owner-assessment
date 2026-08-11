@@ -4,13 +4,44 @@ import { fetchFromSheet } from '../api/googleSheet';
 
 const EXAM_TIME_SECONDS = 90 * 60; // 90분
 
-export function useExam(setId) {
+export function useExam(owner) {
+  const setId = owner?.assigned_set_id;
+  const storageKey = owner?.email ? `exam_state_${owner.email}` : null;
+
+  const getInitialState = () => {
+    if (storageKey) {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {}
+      }
+    }
+    return { answers: {}, timeLeft: EXAM_TIME_SECONDS };
+  };
+
+  const initialState = getInitialState();
+
   const [questions, setQuestions] = useState([]);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
-  const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(EXAM_TIME_SECONDS);
+  const [answers, setAnswers] = useState(initialState.answers);
+  const [timeLeft, setTimeLeft] = useState(initialState.timeLeft);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  // 상태 저장 (제출 중이 아닐 때만)
+  useEffect(() => {
+    if (storageKey && !isSubmitting) {
+      localStorage.setItem(storageKey, JSON.stringify({ answers, timeLeft }));
+    }
+  }, [answers, timeLeft, storageKey, isSubmitting]);
+
+  // 저장된 상태 초기화 (제출 성공 시 호출)
+  const clearExamState = useCallback(() => {
+    if (storageKey) {
+      localStorage.removeItem(storageKey);
+    }
+  }, [storageKey]);
 
   // 문항 로딩
   useEffect(() => {
@@ -80,6 +111,7 @@ export function useExam(setId) {
     formatTime,
     getUnansweredQuestions,
     isSubmitting,
-    setIsSubmitting
+    setIsSubmitting,
+    clearExamState
   };
 }
