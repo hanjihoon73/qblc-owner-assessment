@@ -141,8 +141,12 @@ function doPost(e) {
         CacheService.getScriptCache().put('admin_auth_' + email, code, 300); // 5분 유지
         MailApp.sendEmail({
           to: email,
-          subject: "[깨봉수학] 원장 모의평가 관리자 로그인 인증",
-          body: "관리자 시스템에 로그인하기 위한 인증 번호입니다.\n\n인증 번호: " + code + "\n\n5분 내에 화면에 입력해 주세요."
+          subject: "[깨봉수학] 러닝센터 원장 평가 어드민 로그인",
+          htmlBody: `<div style="font-family: sans-serif; color: #333333;">
+            <p style="font-size: 20px; margin-bottom: 24px;">어드민에 로그인하기 위한 인증 번호입니다.</p>
+            <span style="display:inline-block; padding: 18px 30px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 24px; font-weight: bold; letter-spacing: 12px; color: #2563eb; cursor: text; user-select: all;">${code}</span>
+            <p style="font-size: 20px; margin-top: 24px;">위 인증 번호를 복사하여 5분 내에 화면에 붙여넣기 해주세요.</p>
+          </div>`
         });
         result = { success: true, message: "인증 메일이 발송되었습니다." };
       }
@@ -410,6 +414,26 @@ function doPost(e) {
         result = { success: true, message: "채점이 완료되었습니다." };
       } else {
         result = { success: false, message: "제출 내역을 찾을 수 없습니다." };
+      }
+    }
+    
+    // --- 응시 이력 삭제 (추가) ---
+    else if (action === "delete_submission") {
+      const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("submissions");
+      const data = sheet.getDataRange().getValues();
+      const idIdx = data[0].indexOf("id");
+      let rowIndex = -1;
+      for (let i = 1; i < data.length; i++) {
+        if (data[i][idIdx] === postData.id) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+      if (rowIndex > -1) {
+        sheet.deleteRow(rowIndex);
+        result = { success: true, message: "응시 내역이 삭제되었습니다." };
+      } else {
+        result = { success: false, message: "응시 내역을 찾을 수 없습니다." };
       }
     }
   } catch (error) {

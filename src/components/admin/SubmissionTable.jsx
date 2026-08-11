@@ -43,6 +43,25 @@ export default function SubmissionTable({ submissions, onRefresh }) {
     setLoadingAction(null);
   };
 
+  const handleDelete = async (id, name, dateObj) => {
+    const dateStr = `${dateObj.getMonth() + 1}/${dateObj.getDate()} ${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
+    if (!window.confirm(`정말 삭제하시겠습니까?\n[${name}] 원장님의 ${dateStr} 제출 내역이 영구적으로 삭제됩니다.`)) return;
+    
+    setLoadingAction(`delete-${id}`);
+    try {
+      const res = await postToSheet('delete_submission', { id });
+      if (res.success) {
+        alert('삭제되었습니다.');
+        onRefresh();
+      } else {
+        alert(res.message);
+      }
+    } catch (err) {
+      alert('삭제 중 오류가 발생했습니다.');
+    }
+    setLoadingAction(null);
+  };
+
   if (!submissions || submissions.length === 0) {
     return <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>제출된 내역이 없습니다.</div>;
   }
@@ -127,6 +146,14 @@ export default function SubmissionTable({ submissions, onRefresh }) {
                       style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
                     >
                       {loadingAction === `set-${sub.id}` ? '...' : '세트변경'}
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      disabled={loadingAction === `delete-${sub.id}`}
+                      onClick={() => handleDelete(sub.id, sub.examinee_name, dateObj)}
+                      style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem', color: 'red', borderColor: '#fca5a5' }}
+                    >
+                      {loadingAction === `delete-${sub.id}` ? '...' : '삭제'}
                     </Button>
                   </div>
                 </td>
