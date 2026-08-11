@@ -99,7 +99,8 @@ function doGet(e) {
             text: String(q.text).replace(/\\n/g, '\n'),
             options: options,
             points: Number(q.points),
-            answer: q.answer // 어드민 편집을 위해 answer도 포함
+            answer: q.answer, // 어드민 편집을 위해 answer도 포함
+            last_modified: q.last_modified
           };
         });
         result = { success: true, data: formattedQuestions };

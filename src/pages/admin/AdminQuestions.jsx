@@ -33,6 +33,7 @@ export default function AdminQuestions() {
     setIsEditing(false);
     setLoading(true);
     try {
+      formData.last_modified = new Date().toISOString();
       const action = formData.id.startsWith('q') && formData.id.length > 5 ? 'add_question' : 'edit_question'; // 임시 id 구분
       const res = await postToSheet(action, { question: formData });
       if (res.success) {
@@ -100,6 +101,7 @@ export default function AdminQuestions() {
                 <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>유형</th>
                 <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>문제 내용</th>
                 <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>배점</th>
+                <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>최종 수정 일시</th>
                 <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>관리</th>
               </tr>
             </thead>
@@ -115,6 +117,20 @@ export default function AdminQuestions() {
                     {q.text}
                   </td>
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{q.points}</td>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap', fontSize: '0.85rem', color: '#64748b' }}>
+                    {q.last_modified ? (
+                      (() => {
+                        const d = new Date(q.last_modified);
+                        const yy = String(d.getFullYear()).slice(-2);
+                        const MM = String(d.getMonth() + 1).padStart(2, '0');
+                        const dd = String(d.getDate()).padStart(2, '0');
+                        const HH = String(d.getHours()).padStart(2, '0');
+                        const mm = String(d.getMinutes()).padStart(2, '0');
+                        const ss = String(d.getSeconds()).padStart(2, '0');
+                        return `${yy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+                      })()
+                    ) : '-'}
+                  </td>
                   <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <Button variant="outline" onClick={() => { setSelectedQuestion(q); setIsEditing(true); }} style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>수정</Button>
