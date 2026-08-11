@@ -81,6 +81,13 @@ export default function AdminQuestions() {
             <option value="">전체 문항 보기</option>
           </select>
           <Button 
+            variant="outline"
+            onClick={() => loadQuestions(currentSet)}
+            style={{ padding: '0.5rem 1rem' }}
+          >
+            새로고침
+          </Button>
+          <Button 
             onClick={() => { setSelectedQuestion(null); setIsEditing(true); }}
             style={{ padding: '0.5rem 1rem' }}
           >
