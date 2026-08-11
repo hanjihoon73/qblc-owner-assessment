@@ -100,6 +100,7 @@ function doGet(e) {
             options: options,
             points: Number(q.points),
             answer: q.answer, // 어드민 편집을 위해 answer도 포함
+            score_guide: q.score_guide,
             last_modified: q.last_modified
           };
         });

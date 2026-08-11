@@ -39,15 +39,15 @@ export default function ExamResult() {
         <h3 style={{ marginBottom: '1rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>자동 채점 결과</h3>
         
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-          <span>선다형 (48점 만점)</span>
+          <span>선다형 (52점 만점)</span>
           <span style={{ fontWeight: 'bold' }}>{result.mc_score} 점</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-          <span>OX형 (8점 만점)</span>
+          <span>OX형 (16점 만점)</span>
           <span style={{ fontWeight: 'bold' }}>{result.ox_score} 점</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-          <span>서술형 (24점 만점)</span>
+          <span>서술형 (32점 만점)</span>
           <span>(본사 채점 대기 중)</span>
         </div>
 

@@ -93,8 +93,11 @@ export default function ExamForm() {
       <form onSubmit={handleSubmit}>
         {SECTIONS.map(sec => (
           <div key={sec.id} style={{ marginBottom: '3rem' }}>
-            <h3 style={{ borderBottom: '2px solid var(--border-light)', paddingBottom: '0.5rem', marginBottom: '1.5rem', color: 'var(--accent-primary)' }}>
+            <h3 style={{ borderBottom: '2px solid var(--border-light)', paddingBottom: '0.5rem', marginBottom: '1.5rem', color: 'var(--accent-primary)', display: 'flex', alignItems: 'baseline' }}>
               {sec.title}
+              <span style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginLeft: '0.5rem', fontWeight: 'normal' }}>
+                ({questions.filter(q => q.section_id === sec.id).length}문항)
+              </span>
             </h3>
 
             {questions.filter(q => q.section_id === sec.id).sort((a, b) => a.number - b.number).map(q => (
@@ -108,18 +111,21 @@ export default function ExamForm() {
 
                 {q.type === 'MC' || q.type === 'OX' ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    {q.options.map((opt, idx) => (
-                      <label key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                        <input
-                          type="radio"
-                          name={q.id}
-                          value={opt}
-                          checked={answers[q.id] === opt}
-                          onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                        />
-                        {opt}
-                      </label>
-                    ))}
+                    {q.options.map((opt, idx) => {
+                      const displayOpt = q.type === 'MC' ? `${['①', '②', '③', '④'][idx]} ${opt}` : opt;
+                      return (
+                        <label key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                          <input
+                            type="radio"
+                            name={q.id}
+                            value={displayOpt}
+                            checked={answers[q.id] === displayOpt}
+                            onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                          />
+                          {displayOpt}
+                        </label>
+                      );
+                    })}
                   </div>
                 ) : (
                   <textarea

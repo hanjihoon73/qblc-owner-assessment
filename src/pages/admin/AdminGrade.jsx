@@ -62,7 +62,7 @@ export default function AdminGrade() {
 
     const mcOxScore = Number(submission.mc_score || 0) + Number(submission.ox_score || 0);
     const finalTotalScore = mcOxScore + totalEssayScore;
-    const finalPassStatus = finalTotalScore >= 64 ? '합격' : '불합격';
+    const finalPassStatus = finalTotalScore >= 70 ? '합격' : '불합격';
 
     try {
       const res = await postToSheet('update_grade', {
@@ -91,7 +91,7 @@ export default function AdminGrade() {
     <div style={{ backgroundColor: 'var(--bg-primary)', padding: '2rem', borderRadius: '8px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)', maxWidth: '800px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '2px solid var(--border-light)', paddingBottom: '1rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>서술형 답안 채점 ({essayQuestions.length * 3}점/{essayQuestions.length}개)</h2>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>서술형 답안 채점 ({essayQuestions.length * 4}점/{essayQuestions.length}개)</h2>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>{submission.examinee_name} 원장님 ({submission.center_name}) - Set {submission.exam_set_id || 'A'}</p>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -117,16 +117,25 @@ export default function AdminGrade() {
             <div style={{ marginBottom: '1rem' }}>
               <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>모범 답안 및 채점 기준:</div>
               <div style={{ padding: '1rem', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '4px', whiteSpace: 'pre-wrap', fontSize: '0.9rem', color: '#166534' }}>
-                {q.answer || '채점 기준이 등록되지 않았습니다.'}
+                <div style={{ fontWeight: '600', marginBottom: '0.5rem' }}>[모범 답안]</div>
+                <div>{q.answer || '답안이 등록되지 않았습니다.'}</div>
+                {q.score_guide && (
+                  <>
+                    <div style={{ fontWeight: '600', margin: '1rem 0 0.5rem 0', borderTop: '1px solid #bbf7d0', paddingTop: '0.5rem' }}>[채점 기준]</div>
+                    <div>{q.score_guide}</div>
+                  </>
+                )}
               </div>
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', padding: '1rem', backgroundColor: '#fff', borderRadius: '8px', border: '1px dashed #cbd5e1' }}>
               <strong style={{ color: 'var(--text-secondary)' }}>점수:</strong>
               {[
-                { label: '부족 (1점)', value: 1, color: '#fecaca', active: '#ef4444' },
-                { label: '보통 (2점)', value: 2, color: '#bfdbfe', active: '#3b82f6' },
-                { label: '우수 (3점)', value: 3, color: '#bbf7d0', active: '#22c55e' }
+                { label: '오답 (0점)', value: 0, color: '#fecaca', active: '#ef4444' },
+                { label: '부족 (1점)', value: 1, color: '#fed7aa', active: '#f97316' },
+                { label: '보통 (2점)', value: 2, color: '#fef08a', active: '#eab308' },
+                { label: '충분 (3점)', value: 3, color: '#bfdbfe', active: '#3b82f6' },
+                { label: '완벽 (4점)', value: 4, color: '#bbf7d0', active: '#22c55e' }
               ].map(rubric => (
                 <button
                   key={rubric.value}
@@ -157,9 +166,9 @@ export default function AdminGrade() {
         <div>
           <span style={{ color: 'var(--text-muted)' }}>최종 계산될 총점: </span>
           <strong style={{ fontSize: '1.5rem', color: 'var(--primary-main)', marginLeft: '0.5rem' }}>
-            {Number(submission.mc_score || 0) + Number(submission.ox_score || 0) + Object.values(essayScores).reduce((sum, s) => sum + Number(s || 0), 0)} / 80
+            {Number(submission.mc_score || 0) + Number(submission.ox_score || 0) + Object.values(essayScores).reduce((sum, s) => sum + Number(s || 0), 0)} / 100
           </strong>
-          <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginLeft: '1rem' }}>(합격 기준: 64점)</span>
+          <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginLeft: '1rem' }}>(합격 기준: 70점)</span>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
           <Button variant="outline" onClick={() => navigate('/admin')}>취소</Button>

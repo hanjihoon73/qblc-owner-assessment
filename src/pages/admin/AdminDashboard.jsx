@@ -8,20 +8,23 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeSet, setActiveSet] = useState('A');
+  const [questions, setQuestions] = useState([]);
 
   const loadData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const [subRes, setRes] = await Promise.all([
+      const [subRes, setRes, qRes] = await Promise.all([
         fetchFromSheet('get_submissions'),
-        fetchFromSheet('get_settings')
+        fetchFromSheet('get_settings'),
+        fetchFromSheet('get_questions')
       ]);
       
-      if (subRes.success) {
+      if (subRes.success && qRes.success) {
         setSubmissions(subRes.data);
+        setQuestions(qRes.data);
       } else {
-        setError(subRes.message || '데이터를 불러오지 못했습니다.');
+        setError(subRes.message || qRes.message || '데이터를 불러오지 못했습니다.');
       }
 
       if (setRes.success && setRes.data) {
@@ -83,7 +86,7 @@ export default function AdminDashboard() {
             <div style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>총 {submissions.length}건의 제출 내역</div>
             <Button variant="outline" onClick={loadData}>새로고침</Button>
           </div>
-          <SubmissionTable submissions={submissions} onRefresh={loadData} />
+          <SubmissionTable submissions={submissions} questions={questions} onRefresh={loadData} />
         </>
       )}
     </div>
