@@ -34,6 +34,15 @@ export default function QuestionManager({ question, onSave, onCancel }) {
     onSave(formData);
   };
 
+  const handleResizeHeight = (e) => {
+    if (!e) return;
+    const target = e.target || e;
+    if (target && target.style) {
+      target.style.height = 'auto';
+      target.style.height = target.scrollHeight + 'px';
+    }
+  };
+
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
       <div style={{ backgroundColor: '#fff', padding: '2rem', borderRadius: '8px', width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto' }}>
@@ -77,11 +86,23 @@ export default function QuestionManager({ question, onSave, onCancel }) {
           </div>
 
           {formData.type === 'MC' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-              <div><label>보기 1</label><input name="option1" value={formData.option1} onChange={handleChange} style={{ width: '100%', padding: '0.5rem' }} /></div>
-              <div><label>보기 2</label><input name="option2" value={formData.option2} onChange={handleChange} style={{ width: '100%', padding: '0.5rem' }} /></div>
-              <div><label>보기 3</label><input name="option3" value={formData.option3} onChange={handleChange} style={{ width: '100%', padding: '0.5rem' }} /></div>
-              <div><label>보기 4</label><input name="option4" value={formData.option4} onChange={handleChange} style={{ width: '100%', padding: '0.5rem' }} /></div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.3rem' }}>보기 1</label>
+                <textarea ref={handleResizeHeight} rows={1} name="option1" value={formData.option1} onChange={handleChange} onInput={handleResizeHeight} style={{ width: '100%', padding: '0.5rem', resize: 'none', overflow: 'hidden', boxSizing: 'border-box' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.3rem' }}>보기 2</label>
+                <textarea ref={handleResizeHeight} rows={1} name="option2" value={formData.option2} onChange={handleChange} onInput={handleResizeHeight} style={{ width: '100%', padding: '0.5rem', resize: 'none', overflow: 'hidden', boxSizing: 'border-box' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.3rem' }}>보기 3</label>
+                <textarea ref={handleResizeHeight} rows={1} name="option3" value={formData.option3} onChange={handleChange} onInput={handleResizeHeight} style={{ width: '100%', padding: '0.5rem', resize: 'none', overflow: 'hidden', boxSizing: 'border-box' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.3rem' }}>보기 4</label>
+                <textarea ref={handleResizeHeight} rows={1} name="option4" value={formData.option4} onChange={handleChange} onInput={handleResizeHeight} style={{ width: '100%', padding: '0.5rem', resize: 'none', overflow: 'hidden', boxSizing: 'border-box' }} />
+              </div>
             </div>
           )}
 

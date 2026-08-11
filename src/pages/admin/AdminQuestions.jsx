@@ -95,27 +95,27 @@ export default function AdminQuestions() {
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid var(--border-light)', backgroundColor: '#f8fafc' }}>
-                <th style={{ padding: '1rem' }}>세트</th>
-                <th style={{ padding: '1rem' }}>번호</th>
-                <th style={{ padding: '1rem' }}>유형</th>
-                <th style={{ padding: '1rem' }}>문제 내용</th>
-                <th style={{ padding: '1rem' }}>배점</th>
-                <th style={{ padding: '1rem' }}>정답</th>
-                <th style={{ padding: '1rem' }}>관리</th>
+                <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>세트</th>
+                <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>번호</th>
+                <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>유형</th>
+                <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>문제 내용</th>
+                <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>배점</th>
+                <th style={{ padding: '1rem', whiteSpace: 'nowrap' }}>관리</th>
               </tr>
             </thead>
             <tbody>
               {questions.map((q) => (
                 <tr key={q.id} style={{ borderBottom: '1px solid var(--border-light)' }}>
-                  <td style={{ padding: '1rem', fontWeight: 600 }}>{q.set_id || '공통'}</td>
-                  <td style={{ padding: '1rem' }}>{q.number}</td>
-                  <td style={{ padding: '1rem' }}>{q.type}</td>
+                  <td style={{ padding: '1rem', fontWeight: 600, whiteSpace: 'nowrap' }}>{q.set_id || '공통'}</td>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{q.number}</td>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
+                    {q.type === 'MC' ? '선다형' : q.type === 'OX' ? 'OX형' : q.type === 'ESSAY' ? '서술형' : q.type}
+                  </td>
                   <td style={{ padding: '1rem', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {q.text}
                   </td>
-                  <td style={{ padding: '1rem' }}>{q.points}</td>
-                  <td style={{ padding: '1rem' }}>{q.answer}</td>
-                  <td style={{ padding: '1rem' }}>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{q.points}</td>
+                  <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <Button variant="outline" onClick={() => { setSelectedQuestion(q); setIsEditing(true); }} style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>수정</Button>
                       <Button variant="outline" onClick={() => handleDelete(q.id)} style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', color: 'red', borderColor: '#fca5a5' }}>삭제</Button>
@@ -125,7 +125,7 @@ export default function AdminQuestions() {
               ))}
               {questions.length === 0 && (
                 <tr>
-                  <td colSpan="7" style={{ padding: '2rem', textAlign: 'center' }}>해당 세트에 등록된 문항이 없습니다.</td>
+                  <td colSpan="6" style={{ padding: '2rem', textAlign: 'center' }}>해당 세트에 등록된 문항이 없습니다.</td>
                 </tr>
               )}
             </tbody>
