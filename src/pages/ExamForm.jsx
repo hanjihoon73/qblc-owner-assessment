@@ -95,7 +95,7 @@ export default function ExamForm() {
               {sec.title}
             </h3>
 
-            {questions.filter(q => q.number >= sec.start && q.number <= sec.end).map(q => (
+            {questions.filter(q => q.section_id === sec.id).sort((a, b) => a.number - b.number).map(q => (
               <div key={q.id} style={{ backgroundColor: 'var(--bg-primary)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-light)', marginBottom: '1rem' }}>
                 <div style={{ fontWeight: '500', marginBottom: '1rem', whiteSpace: 'pre-line', lineHeight: '1.6' }}>
                   <span style={{ color: 'var(--accent-primary)', fontWeight: 'bold', marginRight: '0.5rem' }}>
