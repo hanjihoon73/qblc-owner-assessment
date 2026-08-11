@@ -49,6 +49,24 @@ export default function ExamAuth() {
             {loading ? '인증 중...' : '시험 시작하기'}
           </Button>
         </form>
+
+        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+          <button 
+            type="button"
+            onClick={() => window.open('/admin', '_blank', 'noopener,noreferrer')}
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              color: 'var(--text-muted)', 
+              fontSize: '0.85rem', 
+              cursor: 'pointer', 
+              textDecoration: 'underline',
+              padding: '0.5rem'
+            }}
+          >
+            어드민
+          </button>
+        </div>
       </div>
     </div>
   );

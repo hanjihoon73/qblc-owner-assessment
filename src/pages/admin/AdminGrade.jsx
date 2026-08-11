@@ -91,7 +91,7 @@ export default function AdminGrade() {
     <div style={{ backgroundColor: 'var(--bg-primary)', padding: '2rem', borderRadius: '8px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)', maxWidth: '800px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '2px solid var(--border-light)', paddingBottom: '1rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>서술형 답안 채점</h2>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>서술형 답안 채점 ({essayQuestions.length * 3}점/{essayQuestions.length}개)</h2>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>{submission.examinee_name} 원장님 ({submission.center_name}) - Set {submission.exam_set_id || 'A'}</p>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -105,8 +105,8 @@ export default function AdminGrade() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '3rem' }}>
         {essayQuestions.map((q, idx) => (
           <div key={q.id} style={{ padding: '1.5rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid var(--border-light)' }}>
-            <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>
-              Q{q.number}. {q.text}
+            <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', lineHeight: '1.5' }}>
+              Q{q.number}. {q.text.replace(/\s*\(\d+점\)\s*/g, '')}
             </h3>
             <div style={{ marginBottom: '1.5rem' }}>
               <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>제출한 답안:</div>
@@ -122,10 +122,10 @@ export default function AdminGrade() {
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', padding: '1rem', backgroundColor: '#fff', borderRadius: '8px', border: '1px dashed #cbd5e1' }}>
-              <strong style={{ color: 'var(--text-secondary)' }}>루브릭 채점:</strong>
+              <strong style={{ color: 'var(--text-secondary)' }}>점수:</strong>
               {[
                 { label: '부족 (1점)', value: 1, color: '#fecaca', active: '#ef4444' },
-                { label: '보통 (2점)', value: 2, color: '#fef08a', active: '#eab308' },
+                { label: '보통 (2점)', value: 2, color: '#bfdbfe', active: '#3b82f6' },
                 { label: '우수 (3점)', value: 3, color: '#bbf7d0', active: '#22c55e' }
               ].map(rubric => (
                 <button
