@@ -10,6 +10,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminQuestions from './pages/admin/AdminQuestions';
 import AdminGrade from './pages/admin/AdminGrade';
 import AdminAuth from './pages/admin/AdminAuth';
+import AdminOwners from './pages/admin/AdminOwners';
 
 function ProtectedAdminRoute({ children }) {
   const isAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
@@ -36,6 +37,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<AdminDashboard />} />
                   <Route path="/questions" element={<AdminQuestions />} />
+                  <Route path="/owners" element={<AdminOwners />} />
                   <Route path="/grade/:id" element={<AdminGrade />} />
                 </Routes>
               </AdminLayout>

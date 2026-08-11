@@ -5,8 +5,9 @@ export default function AdminLayout({ children }) {
   const currentPath = location.pathname;
 
   const navItems = [
-    { path: '/admin', label: '대시보드 (응시 현황)' },
-    { path: '/admin/questions', label: '평가 세트 관리' }
+    { path: '/admin', label: '응시 현황' },
+    { path: '/admin/questions', label: '평가 세트 관리' },
+    { path: '/admin/owners', label: '원장 관리' }
   ];
 
   return (

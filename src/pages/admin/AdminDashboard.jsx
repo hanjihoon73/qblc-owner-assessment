@@ -59,7 +59,7 @@ export default function AdminDashboard() {
     <div style={{ width: '100%', backgroundColor: 'var(--bg-primary)', padding: '2rem', borderRadius: '8px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '2px solid var(--border-light)', paddingBottom: '1rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>응시 내역 대시보드</h2>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>응시 현황 관리</h2>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>전체 응시자의 제출 내역과 점수를 확인하고 재응시 및 세트를 관리합니다.</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', backgroundColor: '#f0fdf4', padding: '0.8rem 1.2rem', borderRadius: '8px', border: '1px solid #bbf7d0' }}>

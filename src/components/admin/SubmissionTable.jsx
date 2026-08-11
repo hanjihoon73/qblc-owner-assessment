@@ -7,11 +7,11 @@ export default function SubmissionTable({ submissions, onRefresh }) {
   const navigate = useNavigate();
   const [loadingAction, setLoadingAction] = useState(null); // 'retake-id' or 'set-id'
 
-  const handleAllowRetake = async (email, id) => {
-    if (!window.confirm(`${email} 원장님께 재응시 권한을 부여하시겠습니까?`)) return;
+  const handleAllowRetake = async (email, name, id) => {
+    if (!window.confirm(`${name}(${email}) 원장님께 재응시 권한을 부여하시겠습니까?`)) return;
     setLoadingAction(`retake-${id}`);
     try {
-      const res = await postToSheet('allow_retake', { email });
+      const res = await postToSheet('allow_retake', { email, allow: true });
       if (res.success) {
         alert('재응시 권한이 부여되었습니다.');
         onRefresh();
@@ -24,8 +24,8 @@ export default function SubmissionTable({ submissions, onRefresh }) {
     setLoadingAction(null);
   };
 
-  const handleAssignSet = async (email, currentSet, id) => {
-    const newSet = window.prompt(`${email} 원장님께 배정할 세트 ID를 입력하세요 (예: A, B)`, currentSet || 'A');
+  const handleAssignSet = async (email, name, currentSet, id) => {
+    const newSet = window.prompt(`${name}(${email}) 원장님께 배정할 세트 ID를 입력하세요 (예: A, B)`, currentSet || 'A');
     if (!newSet || newSet === currentSet) return;
     
     setLoadingAction(`set-${id}`);
@@ -115,7 +115,7 @@ export default function SubmissionTable({ submissions, onRefresh }) {
                     <Button 
                       variant="outline" 
                       disabled={loadingAction === `retake-${sub.id}`}
-                      onClick={() => handleAllowRetake(sub.owner_id, sub.id)}
+                      onClick={() => handleAllowRetake(sub.owner_email || sub.owner_id, sub.examinee_name, sub.id)}
                       style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
                     >
                       {loadingAction === `retake-${sub.id}` ? '...' : '재응시'}
@@ -123,7 +123,7 @@ export default function SubmissionTable({ submissions, onRefresh }) {
                     <Button 
                       variant="outline"
                       disabled={loadingAction === `set-${sub.id}`}
-                      onClick={() => handleAssignSet(sub.owner_id, sub.exam_set_id, sub.id)}
+                      onClick={() => handleAssignSet(sub.owner_email || sub.owner_id, sub.examinee_name, sub.exam_set_id, sub.id)}
                       style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
                     >
                       {loadingAction === `set-${sub.id}` ? '...' : '세트변경'}
