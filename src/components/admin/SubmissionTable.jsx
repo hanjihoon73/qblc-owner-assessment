@@ -96,7 +96,7 @@ export default function SubmissionTable({ submissions, questions, onRefresh }) {
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>제출일시 (소요시간)</th>
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>이름(가맹점/이메일)</th>
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>응시 세트</th>
-              <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>객+O/X</th>
+              <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>선다+OX</th>
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>서술형</th>
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>총점</th>
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>상태</th>
