@@ -16,7 +16,7 @@ export default function ExamAuth() {
     const success = await login(email);
     if (success) {
       // 인증 성공 시 시험 화면으로 이동
-      navigate('/exam/take'); 
+      navigate('/exam/take');
     }
   };
 
@@ -25,11 +25,11 @@ export default function ExamAuth() {
       <div style={{ maxWidth: '400px', width: '100%', padding: '3rem', backgroundColor: 'var(--bg-primary)', borderRadius: '12px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-light)' }}>
         <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', fontSize: 'var(--text-xl)' }}>원장 인증</h2>
         <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: 'var(--text-sm)' }}>
-          등록된 이메일을 입력하여 시험을 시작하세요.
+          등록된 이메일을 입력하여 테스트를 시작하세요.
         </p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <Input 
+          <Input
             label="이메일 주소"
             id="email"
             type="email"
@@ -38,7 +38,7 @@ export default function ExamAuth() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          
+
           {error && (
             <div style={{ color: 'var(--status-error)', fontSize: 'var(--text-sm)', textAlign: 'center' }}>
               {error}
@@ -46,20 +46,20 @@ export default function ExamAuth() {
           )}
 
           <Button type="submit" disabled={loading || !email}>
-            {loading ? '인증 중...' : '시험 시작하기'}
+            {loading ? '인증 중...' : '테스트 시작'}
           </Button>
         </form>
 
         <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-          <button 
+          <button
             type="button"
             onClick={() => window.open('/admin', '_blank', 'noopener,noreferrer')}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              color: 'var(--text-muted)', 
-              fontSize: '0.85rem', 
-              cursor: 'pointer', 
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-muted)',
+              fontSize: '0.85rem',
+              cursor: 'pointer',
               textDecoration: 'underline',
               padding: '0.5rem'
             }}
