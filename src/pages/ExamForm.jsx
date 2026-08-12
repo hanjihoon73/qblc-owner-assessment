@@ -55,7 +55,7 @@ export default function ExamForm() {
 
     setIsSubmitting(true);
     try {
-      const timeTaken = 5400 - timeLeft;
+      const timeTaken = 3600 - timeLeft;
       const result = await submitExam(owner, answers, timeTaken);
       clearExamState(); // 제출 성공 시 저장된 데이터 삭제
       alert("제출이 완료되었습니다.");
@@ -76,6 +76,22 @@ export default function ExamForm() {
       </div>
     );
   }
+
+  const renderHighlightedText = (text) => {
+    if (!text) return null;
+    const parts = text.split(/(\[.*?\]|<.*?>)/g);
+    return parts.map((part, index) => {
+      if ((part.startsWith('[') && part.endsWith(']')) || (part.startsWith('<') && part.endsWith('>'))) {
+        const innerText = part.slice(1, -1);
+        return (
+          <strong key={index} style={{ textDecoration: 'underline' }}>
+            {innerText}
+          </strong>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
 
   return (
     <div style={{ paddingBottom: '4rem' }}>
@@ -106,7 +122,7 @@ export default function ExamForm() {
                   <span style={{ color: 'var(--accent-primary)', fontWeight: 'bold', marginRight: '0.5rem' }}>
                     {String(q.number).padStart(2, '0')}.
                   </span>
-                  {q.text}
+                  {renderHighlightedText(q.text)}
                 </div>
 
                 {q.type === 'MC' || q.type === 'OX' ? (

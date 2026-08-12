@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchFromSheet } from '../api/googleSheet';
 
-const EXAM_TIME_SECONDS = 90 * 60; // 90분
+const EXAM_TIME_SECONDS = 60 * 60; // 60분
 
 export function useExam(owner) {
   const setId = owner?.assigned_set_id;
