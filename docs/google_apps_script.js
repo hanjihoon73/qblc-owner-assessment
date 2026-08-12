@@ -39,11 +39,8 @@ function doGet(e) {
       } else {
         const owner = owners.find(o => o.email === email);
         if (owner) {
-          // 응시 이력 검사
-          const submissions = getSheetData("submissions") || [];
-          const hasSubmitted = submissions.some(sub => sub.owner_id === email || sub.owner_id === owner.id);
-          
-          if (hasSubmitted && owner.allow_retake !== true && owner.allow_retake !== 'TRUE') {
+          // allow_retake 하나로 응시 가능 여부 통일 (submissions 시트 조회 불필요)
+          if (owner.allow_retake !== true && owner.allow_retake !== 'TRUE') {
             result = { 
               success: false, 
               code: 'ALREADY_SUBMITTED', 
@@ -247,6 +244,37 @@ function doPost(e) {
       else result = { success: false, message: "원장님을 찾을 수 없습니다." };
     }
     
+    else if (action === "update_owner") {
+      const owners = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("owners");
+      if (!owners) throw new Error("'owners' 시트가 없습니다.");
+
+      const data = owners.getDataRange().getValues();
+      const headers = data[0];
+      const ownerData = postData.owner;
+      
+      let rowIndex = -1;
+      for (let i = 1; i < data.length; i++) {
+        if (data[i][headers.indexOf('id')] === ownerData.id) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+
+      if (rowIndex === -1) {
+        result = { success: false, message: "수정할 원장을 찾을 수 없습니다." };
+      } else {
+        const rowData = data[rowIndex - 1]; // 기존 데이터 (0-indexed)
+        headers.forEach((h, idx) => {
+          // 수정 가능한 필드들 (id와 allow_retake, exam_set_id 등은 제외하거나 폼에서 온 값만 업데이트)
+          if (ownerData[h] !== undefined && h !== 'id') {
+            rowData[idx] = ownerData[h];
+          }
+        });
+        owners.getRange(rowIndex, 1, 1, headers.length).setValues([rowData]);
+        result = { success: true, message: "원장 정보가 성공적으로 수정되었습니다." };
+      }
+    }
+    
     // --- 원장 관리 (추가) ---
     else if (action === "add_owner") {
       const oSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("owners");
@@ -257,7 +285,7 @@ function doPost(e) {
       
       const newRow = headers.map(h => {
         if (h === 'id') return newId;
-        if (h === 'allow_retake') return false; // 기본값
+        if (h === 'allow_retake') return true; // 기본값 (최초 응시 가능)
         if (h === 'exam_set_id') return "A"; // 기본값
         return newOwner[h] !== undefined ? newOwner[h] : "";
       });

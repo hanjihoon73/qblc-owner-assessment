@@ -8,6 +8,7 @@ export default function AdminOwners() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [editingOwner, setEditingOwner] = useState(null);
 
   const loadOwners = async () => {
     setLoading(true);
@@ -34,9 +35,10 @@ export default function AdminOwners() {
     setIsEditing(false);
     setLoading(true);
     try {
-      const res = await postToSheet('add_owner', { owner: formData });
+      const action = formData.id ? 'update_owner' : 'add_owner';
+      const res = await postToSheet(action, { owner: formData });
       if (res.success) {
-        alert('원장님이 성공적으로 등록되었습니다.');
+        alert(formData.id ? '원장 정보가 수정되었습니다.' : '원장님이 성공적으로 등록되었습니다.');
         loadOwners();
       } else {
         alert(res.message);
@@ -74,7 +76,7 @@ export default function AdminOwners() {
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>평가에 참여할 원장님을 등록하고 관리합니다.</p>
         </div>
         <div>
-          <Button onClick={() => setIsEditing(true)}>+ 새 원장 등록</Button>
+          <Button onClick={() => { setEditingOwner(null); setIsEditing(true); }}>+ 새 원장 등록</Button>
         </div>
       </div>
 
@@ -96,6 +98,7 @@ export default function AdminOwners() {
                 <th style={{ padding: '1rem' }}>이름</th>
                 <th style={{ padding: '1rem' }}>센터(가맹점)명</th>
                 <th style={{ padding: '1rem' }}>배정 세트</th>
+                <th style={{ padding: '1rem' }}>응시</th>
                 <th style={{ padding: '1rem' }}>관리</th>
               </tr>
             </thead>
@@ -107,6 +110,20 @@ export default function AdminOwners() {
                   <td style={{ padding: '1rem' }}>{owner.center_name}</td>
                   <td style={{ padding: '1rem' }}>{owner.exam_set_id || 'A'}</td>
                   <td style={{ padding: '1rem' }}>
+                    <span style={{ 
+                      padding: '0.25rem 0.75rem', 
+                      borderRadius: '999px', 
+                      fontSize: '0.85rem',
+                      backgroundColor: (owner.allow_retake === true || owner.allow_retake === 'TRUE') ? '#dcfce7' : '#f1f5f9',
+                      color: (owner.allow_retake === true || owner.allow_retake === 'TRUE') ? '#166534' : '#64748b'
+                    }}>
+                      {(owner.allow_retake === true || owner.allow_retake === 'TRUE') ? '가능' : '불가'}
+                    </span>
+                  </td>
+                  <td style={{ padding: '1rem', display: 'flex', gap: '0.5rem' }}>
+                    <Button variant="outline" onClick={() => { setEditingOwner(owner); setIsEditing(true); }} style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', borderColor: 'var(--border-light)', color: 'var(--text-secondary)' }}>
+                      수정
+                    </Button>
                     <Button variant="outline" onClick={() => handleDelete(owner.id)} style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', color: 'red', borderColor: '#fca5a5' }}>
                       삭제
                     </Button>
@@ -125,8 +142,9 @@ export default function AdminOwners() {
 
       {isEditing && (
         <OwnerManager 
+          initialData={editingOwner}
           onSave={handleSave} 
-          onCancel={() => setIsEditing(false)} 
+          onCancel={() => { setIsEditing(false); setEditingOwner(null); }} 
         />
       )}
     </div>

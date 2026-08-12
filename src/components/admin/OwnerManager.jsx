@@ -2,12 +2,14 @@ import { useState } from 'react';
 import Button from '../common/Button';
 import Input from '../common/Input';
 
-export default function OwnerManager({ onSave, onCancel }) {
-  const [formData, setFormData] = useState({
+export default function OwnerManager({ initialData, onSave, onCancel }) {
+  const [formData, setFormData] = useState(initialData || {
     email: '',
     name: '',
     center_name: ''
   });
+  
+  const isEdit = !!initialData;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +43,7 @@ export default function OwnerManager({ onSave, onCancel }) {
         maxHeight: '90vh', overflowY: 'auto'
       }}>
         <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
-          새 원장 등록
+          {isEdit ? '원장 정보 수정' : '새 원장 등록'}
         </h3>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
@@ -54,6 +56,7 @@ export default function OwnerManager({ onSave, onCancel }) {
               value={formData.email} 
               onChange={handleChange} 
               placeholder="예: director@quebon.com"
+              disabled={isEdit}
               required 
             />
           </div>
@@ -84,7 +87,7 @@ export default function OwnerManager({ onSave, onCancel }) {
           
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
             <Button type="button" variant="outline" onClick={onCancel}>취소</Button>
-            <Button type="submit">등록하기</Button>
+            <Button type="submit">{isEdit ? '수정하기' : '등록하기'}</Button>
           </div>
         </form>
       </div>

@@ -14,14 +14,22 @@ export default function AdminDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [subRes, setRes, qRes] = await Promise.all([
+      const [subRes, setRes, qRes, ownerRes] = await Promise.all([
         fetchFromSheet('get_submissions'),
         fetchFromSheet('get_settings'),
-        fetchFromSheet('get_questions')
+        fetchFromSheet('get_questions'),
+        fetchFromSheet('get_owners')
       ]);
       
-      if (subRes.success && qRes.success) {
-        setSubmissions(subRes.data);
+      if (subRes.success && qRes.success && ownerRes.success) {
+        const enrichedSubmissions = subRes.data.map(sub => {
+          const ownerInfo = ownerRes.data.find(o => o.email === (sub.owner_email || sub.owner_id));
+          return {
+            ...sub,
+            allow_retake: ownerInfo ? (ownerInfo.allow_retake === true || ownerInfo.allow_retake === 'TRUE') : false,
+          };
+        });
+        setSubmissions(enrichedSubmissions);
         setQuestions(qRes.data);
       } else {
         setError(subRes.message || qRes.message || '데이터를 불러오지 못했습니다.');

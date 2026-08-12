@@ -100,6 +100,7 @@ export default function SubmissionTable({ submissions, questions, onRefresh }) {
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>서술형</th>
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>총점</th>
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>상태</th>
+              <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>응시</th>
               <th style={{ padding: '1rem', fontWeight: 600, color: 'var(--text-secondary)', textAlign: 'center' }}>관리</th>
             </tr>
           </thead>
@@ -145,6 +146,17 @@ export default function SubmissionTable({ submissions, questions, onRefresh }) {
                       color: sub.pass_status === '합격' ? '#166534' : sub.pass_status === '채점중' ? '#854d0e' : '#991b1b'
                     }}>
                       {sub.pass_status}
+                    </span>
+                  </td>
+                  <td style={{ padding: '1rem' }}>
+                    <span style={{ 
+                      padding: '0.25rem 0.75rem', 
+                      borderRadius: '999px', 
+                      fontSize: '0.85rem',
+                      backgroundColor: sub.allow_retake ? '#dcfce7' : '#f1f5f9',
+                      color: sub.allow_retake ? '#166534' : '#64748b'
+                    }}>
+                      {sub.allow_retake ? '가능' : '불가'}
                     </span>
                   </td>
                   <td style={{ padding: '1rem', textAlign: 'center', position: 'relative' }}>
