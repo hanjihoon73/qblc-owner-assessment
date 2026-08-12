@@ -115,6 +115,26 @@ function doGet(e) {
       const owners = getSheetData("owners");
       result = { success: true, data: owners };
     }
+    else if (action === "get_holidays") {
+      const year = e.parameter.year || new Date().getFullYear();
+      const month = e.parameter.month || ""; 
+      const apiKey = e.parameter.apiKey || ""; 
+      let url = `http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?solYear=${year}&ServiceKey=${apiKey}&_type=json`;
+      if (month) url += `&solMonth=${month}`;
+      
+      const response = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+      const json = JSON.parse(response.getContentText());
+      let holidays = [];
+      if (json && json.response && json.response.body && json.response.body.items && json.response.body.items.item) {
+        const item = json.response.body.items.item;
+        if (Array.isArray(item)) {
+          holidays = item.map(i => String(i.locdate));
+        } else {
+          holidays = [String(item.locdate)];
+        }
+      }
+      result = { success: true, data: holidays };
+    }
     else {
       result = { success: false, message: "잘못된 액션입니다." };
     }
@@ -437,6 +457,32 @@ function doPost(e) {
       } else {
         result = { success: false, message: "응시 내역을 찾을 수 없습니다." };
       }
+    }
+    
+    // --- 시연 일정 메일 발송 ---
+    else if (action === "schedule_demo") {
+      const { email, name, center_name, mc_score, ox_score, demo_schedules } = postData;
+      const targetEmail = "qblc@quebon.com";
+      const subject = `[깨봉수학] 원장 응시 제출 및 시연 일정 접수`;
+      const htmlBody = `
+        <div style="font-size: 20pt; font-family: sans-serif; color: #333333; line-height: 1.6;">
+          답안 제출 및 시연 테스트 희망 일정이 접수되었습니다.<br><br>
+          - 원장명: ${name}<br>
+          - 가맹점: ${center_name}<br>
+          - 계정: ${email}<br>
+          - 채점 점수 (선다형/OX): ${mc_score}점 / ${ox_score}점<br>
+          - 시연 희망 일정:<br>
+          <div style="padding-left: 20px;">
+            ${demo_schedules}
+          </div>
+        </div>
+      `;
+      MailApp.sendEmail({
+        to: targetEmail,
+        subject: subject,
+        htmlBody: htmlBody
+      });
+      result = { success: true, message: "시연 일정이 성공적으로 접수되었습니다." };
     }
   } catch (error) {
     result = { success: false, message: error.toString() };
