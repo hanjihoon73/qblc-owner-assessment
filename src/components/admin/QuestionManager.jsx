@@ -123,7 +123,7 @@ export default function QuestionManager({ question, onSave, onCancel }) {
                 <option value="X">X</option>
               </select>
             ) : (
-              <input name="answer" value={formData.answer} onChange={handleChange} placeholder="수동 채점 입력" style={{ width: '100%', padding: '0.5rem', border: '2px solid var(--primary-main)' }} required />
+              <textarea name="answer" value={formData.answer} onChange={handleChange} placeholder="서술형 모범 답안 / 채점 기준 입력" style={{ width: '100%', padding: '0.5rem', border: '2px solid var(--primary-main)', minHeight: '80px', resize: 'vertical' }} required />
             )}
           </div>
 
