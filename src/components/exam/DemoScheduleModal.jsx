@@ -26,10 +26,10 @@ export default function DemoScheduleModal({ onSelect, onCancel }) {
     return `${yyyy}${mm}${dd}`;
   };
 
-  const calculateNext3Weekdays = (holidaysStrArr) => {
+  const calculateNextWeekdays = (holidaysStrArr) => {
     const days = [];
     let d = new Date();
-    while (days.length < 3) {
+    while (days.length < 6) {
       d.setDate(d.getDate() + 1);
       const dayOfWeek = d.getDay();
       
@@ -61,14 +61,14 @@ export default function DemoScheduleModal({ onSelect, onCancel }) {
         const json = await res.json();
         
         if (json.success) {
-          calculateNext3Weekdays(json.data || []);
+          calculateNextWeekdays(json.data || []);
         } else {
-          calculateNext3Weekdays([]);
+          calculateNextWeekdays([]);
         }
       } catch (err) {
         console.error('Failed to fetch holidays:', err);
         // 에러 시 주말만 배제하여 계산
-        calculateNext3Weekdays([]);
+        calculateNextWeekdays([]);
       } finally {
         setLoadingHolidays(false);
       }
