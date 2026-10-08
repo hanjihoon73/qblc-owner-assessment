@@ -510,6 +510,26 @@ function doPost(e) {
         subject: subject,
         htmlBody: htmlBody
       });
+      
+      // 원장님께 안내 메일 발송
+      const ownerSubject = "[깨봉수학] 시연 테스트 준비 안내";
+      const ownerHtmlBody = `
+        <div style="font-family: sans-serif; color: #333333; line-height: 1.6;">
+          안녕하세요, 깨봉수학입니다.<br><br>
+          시연 테스트 준비 사항을 아래와 같이 안내해 드립니다.<br>
+          1. 기기: 노트북 / 태블릿 / 데스크톱 중 선택<br>
+          2. 센터 본 계정 또는 교육용 테스트 계정으로 LMS 로그인<br>
+          3. 줌 화면 공유 방법 사전 숙지<br><br>
+          시연 테스트 일정은 신청하신 희망 일정을 조율해 연락드릴 예정이니 참고해 주세요.<br><br>
+          감사합니다.
+        </div>
+      `;
+      MailApp.sendEmail({
+        to: email,
+        subject: ownerSubject,
+        htmlBody: ownerHtmlBody
+      });
+
       result = { success: true, message: "시연 일정이 성공적으로 접수되었습니다." };
     }
   } catch (error) {
